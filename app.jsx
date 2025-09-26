@@ -80,6 +80,16 @@ function saveState(state){ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify
 function fmtDate(iso){ try{ return new Intl.DateTimeFormat('it-IT',{day:'numeric',month:'long',year:'numeric'}).format(new Date(iso)); }catch{ return iso; } }
 function clamp(n,min,max){ return Math.max(min, Math.min(max, n)); }
 
+function loadLogo(){ try{ return localStorage.getItem(STORAGE_KEY+':logo') || null; }catch{ return null; } }
+function saveLogo(dataUrl){ try{ if(dataUrl){ localStorage.setItem(STORAGE_KEY+':logo', dataUrl);} else { localStorage.removeItem(STORAGE_KEY+':logo'); } }catch{} }
+function applyFavicon(dataUrl){
+  try{
+    let link = document.querySelector('link[rel="icon"]');
+    if(!link){ link = document.createElement('link'); link.rel='icon'; document.head.appendChild(link); }
+    link.href = dataUrl || 'icon-256.png';
+  }catch{}
+}
+
 // Punteggio: priorità (10/20/30) + urgenza (1..5)
 function scoreTask(t){
   const prio = t.priorita === "alta" ? 3 : t.priorita === "media" ? 2 : 1;
